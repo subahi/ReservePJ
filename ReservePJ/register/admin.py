@@ -4,6 +4,8 @@ from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.utils.translation import ugettext_lazy as _
 from .models import User
 
+#画像 https://qiita.com/j54854/items/1f0560142e39d888251c
+#admin.site.register(User)
 
 class MyUserChangeForm(UserChangeForm):
     class Meta:
@@ -20,7 +22,7 @@ class MyUserCreationForm(UserCreationForm):
 class MyUserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        (_('Personal info'), {'fields': ('first_name', 'last_name')}),
+        (_('Personal info'), {'fields': ('first_name', 'last_name','image','profile')}),
         (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
                                        'groups', 'user_permissions')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),

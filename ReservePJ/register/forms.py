@@ -23,7 +23,7 @@ class UserCreateForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('email',)
+        fields = ('email','last_name', 'first_name','image','profile',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -40,7 +40,7 @@ class UserUpdateForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('last_name', 'first_name',)
+        fields = ('image','last_name', 'first_name','profile',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -88,3 +88,5 @@ class EmailChangeForm(forms.ModelForm):
         email = self.cleaned_data['email']
         User.objects.filter(email=email, is_active=False).delete()
         return email
+
+#画像表示フォーム

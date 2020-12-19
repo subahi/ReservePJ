@@ -126,3 +126,7 @@ LOGIN_URL = 'register:login'
 LOGIN_REDIRECT_URL = 'register:top'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+#画像ファイルのアップロード先
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

@@ -9,7 +9,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.core.signing import BadSignature, SignatureExpired, loads, dumps
 from django.http import Http404, HttpResponseBadRequest
-from django.shortcuts import redirect, resolve_url
+from django.shortcuts import render, redirect, resolve_url
 from django.template.loader import render_to_string
 from django.views import generic
 from django.urls import reverse_lazy
@@ -114,17 +114,20 @@ class OnlyYouMixin(UserPassesTestMixin):
 
 
 class UserDetail(OnlyYouMixin, generic.DetailView):
+    """ユーザー情報閲覧"""
     model = User
     template_name = 'register/user_detail.html'
 
 
 class UserUpdate(OnlyYouMixin, generic.UpdateView):
+    """ユーザー情報更新"""
     model = User
     form_class = UserUpdateForm
     template_name = 'register/user_form.html'
 
     def get_success_url(self):
         return resolve_url('register:user_detail', pk=self.kwargs['pk'])
+
 
 class PasswordChange(PasswordChangeView):
     """パスワード変更ビュー"""
