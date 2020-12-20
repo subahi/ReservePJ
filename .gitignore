@@ -1,0 +1,8 @@
+env/ 
+obj/
+*.sln
+.suo
+pycache/
+media/
+migrations/
+!init.py
