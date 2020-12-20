@@ -4,6 +4,7 @@ from django.contrib.auth.forms import (
     PasswordResetForm, SetPasswordForm
 )
 from django.contrib.auth import get_user_model
+from .widgets import FileInputWithPreview
 
 User = get_user_model()
 
@@ -24,11 +25,16 @@ class UserCreateForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('email','last_name', 'first_name','image','profile',)
+        widgets = {
+            'image': FileInputWithPreview,
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
+            if field.label == 'プロフィール画像':
+                field.widget.attrs["class"] += " preview-marker"
 
     def clean_email(self):
         email = self.cleaned_data['email']
@@ -41,11 +47,16 @@ class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('image','last_name', 'first_name','profile',)
+        widgets = {
+            'image': FileInputWithPreview,
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
+            if field.label == 'プロフィール画像':
+                field.widget.attrs["class"] += " preview-marker"
 
 class MyPasswordChangeForm(PasswordChangeForm):
     """パスワード変更フォーム"""

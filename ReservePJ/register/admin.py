@@ -1,8 +1,11 @@
 from django.contrib import admin
+from django.db import models
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.utils.translation import ugettext_lazy as _
 from .models import User
+from .widgets import FileInputWithPreview
+
 
 #画像 https://qiita.com/j54854/items/1f0560142e39d888251c
 #admin.site.register(User)
@@ -39,6 +42,9 @@ class MyUserAdmin(UserAdmin):
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
     search_fields = ('email', 'first_name', 'last_name')
     ordering = ('email',)
+    formfield_overrides = {
+        models.ImageField: {'widget': FileInputWithPreview},
+    }
 
 
 admin.site.register(User, MyUserAdmin)

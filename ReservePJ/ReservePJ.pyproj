@@ -51,6 +51,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="register\views.py" />
+    <Compile Include="register\widgets.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="register\__init__.py" />
     <Compile Include="ReservePJ\__init__.py" />
     <Compile Include="ReservePJ\settings.py" />
@@ -68,6 +71,8 @@
     <Folder Include="app\templates\" />
     <Folder Include="app\templates\app\" />
     <Folder Include="register\" />
+    <Folder Include="register\static\" />
+    <Folder Include="register\static\register\" />
     <Folder Include="register\templates\register\mail_template\create\" />
     <Folder Include="register\migrations\" />
     <Folder Include="register\templates\register\mail_template\" />
@@ -75,12 +80,15 @@
     <Folder Include="register\templates\register\" />
     <Folder Include="register\templates\register\mail_template\email_change\" />
     <Folder Include="register\templates\register\mail_template\password_reset\" />
+    <Folder Include="register\templates\register\widgets\" />
     <Folder Include="ReservePJ\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="register\static\register\preview.js" />
     <Content Include="register\templates\register\email_change_complete.html" />
     <Content Include="register\templates\register\email_change_done.html" />
     <Content Include="register\templates\register\email_change_form.html" />
+    <Content Include="register\templates\register\widgets\file_input_with_preview.html" />
     <Content Include="register\templates\register\mail_template\create\message.txt" />
     <Content Include="register\templates\register\mail_template\create\subject.txt" />
     <Content Include="register\templates\register\base.html" />
