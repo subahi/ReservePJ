@@ -5,6 +5,7 @@ from django.contrib.auth.forms import (
 )
 from django.contrib.auth import get_user_model
 from .widgets import FileInputWithPreview
+from reserve.models import Reserve
 
 User = get_user_model()
 
@@ -100,4 +101,14 @@ class EmailChangeForm(forms.ModelForm):
         User.objects.filter(email=email, is_active=False).delete()
         return email
 
-#画像表示フォーム
+#予約時間リスト
+RESERVEHOUR = (
+        
+)
+
+class ReserveForm(forms.ModelForm):
+    """席予約フォーム"""
+
+    class Meta:
+        model = Reserve
+        fields = ('seats','reserve_date',)

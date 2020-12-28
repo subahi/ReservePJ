@@ -37,6 +37,9 @@
           <li>
             <a class="nav-item nav-link" href="{% url 'register:password_change' %}">パスワードの変更</a>
           </li>
+          <li>
+            <a class="nav-item nav-link" href="{% url 'register:reserve_seats' user.pk %}">予約フォーム</a>
+          </li>
           {% else %}
           <li class="nav-item">
             <a class="nav-item nav-link" href="{% url 'register:login' %}">

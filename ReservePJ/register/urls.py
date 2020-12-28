@@ -1,9 +1,9 @@
 
-from django.urls import path
+from django.urls import path, include
 from . import views
+#from reserve.views import ReserveSeats
 
 app_name = 'register'
-
 urlpatterns = [
     path('', views.Top.as_view(), name='top'),
     path('login/', views.Login.as_view(), name='login'),
@@ -22,4 +22,5 @@ urlpatterns = [
     path('email/change/', views.EmailChange.as_view(), name='email_change'),
     path('email/change/done/', views.EmailChangeDone.as_view(), name='email_change_done'),
     path('email/change/complete/<str:token>/', views.EmailChangeComplete.as_view(), name='email_change_complete'),
+    path('reserve_seats/<int:pk>/', views.ReserveSeats.as_view(), name='reserve_seats'),
 ]

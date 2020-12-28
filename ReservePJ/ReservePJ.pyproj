@@ -59,6 +59,17 @@
     <Compile Include="ReservePJ\settings.py" />
     <Compile Include="ReservePJ\urls.py" />
     <Compile Include="ReservePJ\wsgi.py" />
+    <Compile Include="reserve\admin.py" />
+    <Compile Include="reserve\apps.py" />
+    <Compile Include="reserve\forms.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="reserve\migrations\__init__.py" />
+    <Compile Include="reserve\models.py" />
+    <Compile Include="reserve\tests.py" />
+    <Compile Include="reserve\urls.py" />
+    <Compile Include="reserve\views.py" />
+    <Compile Include="reserve\__init__.py" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\" />
@@ -82,12 +93,17 @@
     <Folder Include="register\templates\register\mail_template\password_reset\" />
     <Folder Include="register\templates\register\widgets\" />
     <Folder Include="ReservePJ\" />
+    <Folder Include="reserve\" />
+    <Folder Include="reserve\migrations\" />
+    <Folder Include="reserve\templates\" />
+    <Folder Include="reserve\templates\reserve\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="register\static\register\preview.js" />
     <Content Include="register\templates\register\email_change_complete.html" />
     <Content Include="register\templates\register\email_change_done.html" />
     <Content Include="register\templates\register\email_change_form.html" />
+    <Content Include="register\templates\register\reserve_seats.html" />
     <Content Include="register\templates\register\widgets\file_input_with_preview.html" />
     <Content Include="register\templates\register\mail_template\create\message.txt" />
     <Content Include="register\templates\register\mail_template\create\subject.txt" />
@@ -141,6 +157,7 @@
     <Content Include="app\templates\app\login.html" />
     <Content Include="app\templates\app\loginpartial.html" />
     <Content Include="admin_userinformation.txt" />
+    <Content Include="reserve\templates\reserve\reserve_seats.html" />
   </ItemGroup>
   <ItemGroup>
     <None Include="readme.html">

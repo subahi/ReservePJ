@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import (
     LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView,
-    PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
+    PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView,
 )
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
@@ -15,8 +15,10 @@ from django.views import generic
 from django.urls import reverse_lazy
 from .forms import (
     LoginForm, UserCreateForm, UserUpdateForm, MyPasswordChangeForm,
-    MyPasswordResetForm, MySetPasswordForm,EmailChangeForm
+    MyPasswordResetForm, MySetPasswordForm,EmailChangeForm,
+    ReserveForm,
 )
+from reserve.models import Reserve
 
 User = get_user_model()
 
@@ -222,3 +224,9 @@ class EmailChangeComplete(LoginRequiredMixin, generic.TemplateView):
             request.user.email = new_email
             request.user.save()
             return super().get(request, **kwargs)
+        
+class ReserveSeats(OnlyYouMixin,generic.CreateView):
+    """席予約"""
+    model = Reserve
+    form_class = ReserveForm
+    template_name = 'reserve/reserve_seats.html'
