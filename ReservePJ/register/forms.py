@@ -111,4 +111,5 @@ class ReserveForm(forms.ModelForm):
 
     class Meta:
         model = Reserve
-        fields = ('seats','reserve_date',)
+        fields = ('__all__')
+        exclude = ('reserve_user','reserve_flg','reserve_time','change_time',)

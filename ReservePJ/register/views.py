@@ -225,8 +225,18 @@ class EmailChangeComplete(LoginRequiredMixin, generic.TemplateView):
             request.user.save()
             return super().get(request, **kwargs)
         
-class ReserveSeats(OnlyYouMixin,generic.CreateView):
+class ReserveSeats(LoginRequiredMixin,generic.CreateView):
     """席予約"""
     model = Reserve
     form_class = ReserveForm
     template_name = 'reserve/reserve_seats.html'
+ 
+    # form_valid関数をオーバーライドすることで、更新するフィールドと値を指定できる
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        # ログイン中のユーザーIDを隠しフォームの初期値に渡す
+        post.reserve_user = self.request.user
+        # 予約済フラグにTrueをセット
+        post.reserve_flg = True
+        post.save()
+        return redirect('register:reserve_seats')

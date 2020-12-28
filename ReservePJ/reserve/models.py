@@ -49,16 +49,18 @@ class Reserve(models.Model):
     #予約している日時
     reserve_hour_zone = models.IntegerField()
     #予約した時間帯
-    #時間帯 + 開始時間(hh)でend_timeを算出
     reserve_start_time = models.TimeField()
-    reserve_end_time = models.TimeField()
     #予約した時間
     reserve_time = models.DateTimeField(auto_now_add=True)
     #予約作業をした日時（CREATED_TIMEと同機能）
     change_time = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.reserve_date + reserve_user
+        return self.reserve_id
+    
+    #時間帯 + 開始時間(hh)でend_timeを算出
+    def reserve_end_time(self):
+        return self.reserve_hour_zone + self.reserve_start_time
 
     class Meta:
         ordering = ['seats_id','reserve_id']
