@@ -6,6 +6,8 @@ from django.contrib.auth.forms import (
 from django.contrib.auth import get_user_model
 from .widgets import FileInputWithPreview
 from reserve.models import Reserve
+import bootstrap_datepicker_plus as datetimepicker
+from django.forms.widgets import SplitDateTimeWidget 
 
 User = get_user_model()
 
@@ -101,15 +103,18 @@ class EmailChangeForm(forms.ModelForm):
         User.objects.filter(email=email, is_active=False).delete()
         return email
 
-#予約時間リスト
-RESERVEHOUR = (
-        
-)
+class DateInput(forms.DateInput):
+    input_type = 'date'
 
 class ReserveForm(forms.ModelForm):
     """席予約フォーム"""
-
+    reserve_date = forms.SplitDateTimeField(label = "予約日時",
+                                            widget=forms.SplitDateTimeWidget(date_attrs={"type":"date"}, time_attrs={"type":"time"}))
     class Meta:
         model = Reserve
         fields = ('__all__')
         exclude = ('reserve_user','reserve_flg','reserve_time','change_time',)
+        labels={
+            'seats':'予約席',
+            'reserve_hour_zone':'予約時間数',
+            }

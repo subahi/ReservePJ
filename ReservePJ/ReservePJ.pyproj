@@ -104,6 +104,7 @@
     <Content Include="register\templates\register\email_change_done.html" />
     <Content Include="register\templates\register\email_change_form.html" />
     <Content Include="register\templates\register\reserve_seats.html" />
+    <Content Include="register\templates\register\reserve_detail.html" />
     <Content Include="register\templates\register\widgets\file_input_with_preview.html" />
     <Content Include="register\templates\register\mail_template\create\message.txt" />
     <Content Include="register\templates\register\mail_template\create\subject.txt" />

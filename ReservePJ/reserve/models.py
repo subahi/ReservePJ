@@ -1,6 +1,9 @@
 from register.models import User
 from django.db import models
 
+from django.utils import timezone
+import datetime
+
 # Create your models here.
 class Floor(models.Model):
     floor_id = models.AutoField( primary_key=True)
@@ -20,7 +23,7 @@ class Room(models.Model):
     room_name = models.CharField(max_length=150,verbose_name='ルーム名')
 
     def __str__(self):
-        return self.room_name
+        return str(self.floor) + '-' + self.room_name
 
     class Meta:
         ordering = ['floor_id','room_id']
@@ -33,7 +36,7 @@ class Seats(models.Model):
     seats_name = models.CharField(max_length=150,verbose_name='座席名')
 
     def __str__(self):
-        return self.seats_name
+        return str(self.room) + '-' + self.seats_name
 
     class Meta:
         ordering = ['room_id','seats_id']
@@ -45,22 +48,27 @@ class Reserve(models.Model):
     reserve_user = models.ForeignKey(User, on_delete=models.CASCADE)
     reserve_id = models.AutoField(primary_key=True)
     reserve_flg = models.BooleanField()
-    reserve_date = models.DateField()
+    reserve_date = models.DateTimeField()
     #予約している日時
     reserve_hour_zone = models.IntegerField()
-    #予約した時間帯
-    reserve_start_time = models.TimeField()
+    ##予約した時間帯
+    #reserve_start_time = models.TimeField()
     #予約した時間
     reserve_time = models.DateTimeField(auto_now_add=True)
     #予約作業をした日時（CREATED_TIMEと同機能）
     change_time = models.DateTimeField(auto_now=True)
-
+    
     def __str__(self):
-        return self.reserve_id
+       return str(self.reserve_user) + '_' + self.reserve_time.strftime("%Y/%m/%d %H:%M:%S")
+
+    #def __str__(self):
+    #   return str(self.reserve_start_time + datetime.timedelta(hours=self.reserve_hour_zone))
     
     #時間帯 + 開始時間(hh)でend_timeを算出
     def reserve_end_time(self):
-        return self.reserve_hour_zone + self.reserve_start_time
+        start = datetime.timedelta()
+        zone = datetime.timedelta(hours=self.reserve_hour_zone,minutes=0)
+        return datetime.timedelta(hours=self.reserve_hour_zone,minutes=0) + start   
 
     class Meta:
         ordering = ['seats_id','reserve_id']

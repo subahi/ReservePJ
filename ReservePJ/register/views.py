@@ -240,3 +240,8 @@ class ReserveSeats(LoginRequiredMixin,generic.CreateView):
         post.reserve_flg = True
         post.save()
         return redirect('register:reserve_seats')
+
+class ReserveDetail(generic.DetailView):
+    """予約情報閲覧"""
+    model = Reserve
+    template_name = 'register/reserve_detail.html'
