@@ -124,6 +124,7 @@ STATIC_ROOT = posixpath.join(*(BASE_DIR.split(os.path.sep) + ['static']))
 AUTH_USER_MODEL = 'register.User'
 # ログインページの設定
 LOGIN_URL = 'register:login'
+# ログイン後は予約情報を一覧表示
 LOGIN_REDIRECT_URL = 'register:top'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

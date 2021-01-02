@@ -120,8 +120,8 @@ class ReserveForm(forms.ModelForm):
             'reserve_hour_zone':'予約時間数',
             }
 
-#予約情報一覧表示、更新
 class ReserveChangeForm(forms.ModelForm):
+    """席予約情報更新フォーム"""
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

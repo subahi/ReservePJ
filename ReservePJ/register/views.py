@@ -24,7 +24,8 @@ from . import forms
 User = get_user_model()
 
 
-class Top(generic.TemplateView):
+class Top(generic.ListView):
+    queryset = Reserve.objects.filter(reserve_flg= True)
     template_name = 'register/top.html'
 
 
@@ -245,8 +246,8 @@ class ReserveSeats(LoginRequiredMixin,generic.CreateView):
 class ReserveDetailAll(generic.ListView):
     """予約情報閲覧"""
     
-    model = Reserve
-    template_name = 'register/top.html'
+    queryset = Reserve.objects.filter(reserve_flg= True)
+    template_name = 'register/reserve_detail.html'
 
 def ReserveChange(request):
     ### formSetクラスのインスタンス

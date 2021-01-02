@@ -90,4 +90,4 @@ class User(AbstractBaseUser, PermissionsMixin):
         他アプリケーションが、username属性にアクセスした場合に備えて定義
         メールアドレスを返す
         """
-        return self.email
+        return self.get_full_name
