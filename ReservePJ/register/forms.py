@@ -122,6 +122,9 @@ class ReserveForm(forms.ModelForm):
 
 class ReserveChangeForm(forms.ModelForm):
     """席予約情報更新フォーム"""
+    
+    reserve_date = forms.SplitDateTimeField(label = "予約日時",
+                                            widget=forms.SplitDateTimeWidget(date_attrs={"type":"date"}, time_attrs={"type":"time"}))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -131,6 +134,11 @@ class ReserveChangeForm(forms.ModelForm):
     class Meta:
         model = Reserve
         fields = ('seats','reserve_date','reserve_hour_zone','reserve_flg')
+        labels={
+            'seats':'予約席',
+            'reserve_hour_zone':'予約時間数',
+            'reserve_flg':'キャンセルフラグ'
+            }
 
 
 ### modelformset_factoryはFormSetクラスを返します

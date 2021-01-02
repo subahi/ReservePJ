@@ -13,7 +13,10 @@
                         予約済席:{{ reserve.seats }} 
                      </p>
                     <p class="card-text">
-                        予約日付:{{ reserve.reserve_date }}
+                        予約日付:{{ reserve.reserve_date|date:"Y/m/d" }}
+                     </p>
+                    <p class="card-text">
+                        予約時間:{{ reserve.reserve_date|date:"H:i" }} - {{ reserve.reserve_end_time|date:"H:i" }}
                      </p>
                     <p class="card-text">
                         予約者:{{ reserve.reserve_user.username }}

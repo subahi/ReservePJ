@@ -66,9 +66,9 @@ class Reserve(models.Model):
     
     #時間帯 + 開始時間(hh)でend_timeを算出
     def reserve_end_time(self):
-        start = datetime.timedelta()
+        start = self.reserve_date
         zone = datetime.timedelta(hours=self.reserve_hour_zone,minutes=0)
-        return datetime.timedelta(hours=self.reserve_hour_zone,minutes=0) + start   
+        return start + zone  
 
     class Meta:
         ordering = ['seats_id','reserve_id']

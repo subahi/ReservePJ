@@ -243,12 +243,6 @@ class ReserveSeats(LoginRequiredMixin,generic.CreateView):
         post.save()
         return redirect('register:reserve_seats')
     
-class ReserveDetailAll(generic.ListView):
-    """予約情報閲覧"""
-    
-    queryset = Reserve.objects.filter(reserve_flg= True)
-    template_name = 'register/reserve_detail.html'
-
 def ReserveChange(request):
     ### formSetクラスのインスタンス
     formset = ReserveChangeFormSet(request.POST or None,queryset=Reserve.objects.filter(reserve_user_id=request.user))
