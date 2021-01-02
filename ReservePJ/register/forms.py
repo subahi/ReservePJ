@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import models, modelformset_factory
 from django.contrib.auth.forms import (
     AuthenticationForm, UserCreationForm, PasswordChangeForm,
     PasswordResetForm, SetPasswordForm
@@ -118,3 +119,21 @@ class ReserveForm(forms.ModelForm):
             'seats':'予約席',
             'reserve_hour_zone':'予約時間数',
             }
+
+#予約情報一覧表示、更新
+class ReserveChangeForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+    class Meta:
+        model = Reserve
+        fields = ('seats','reserve_date','reserve_hour_zone','reserve_flg')
+
+
+### modelformset_factoryはFormSetクラスを返します
+ReserveChangeFormSet = forms.modelformset_factory(
+    Reserve, form=ReserveChangeForm, extra=0
+)

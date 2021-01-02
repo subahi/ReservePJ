@@ -16,9 +16,10 @@ from django.urls import reverse_lazy
 from .forms import (
     LoginForm, UserCreateForm, UserUpdateForm, MyPasswordChangeForm,
     MyPasswordResetForm, MySetPasswordForm,EmailChangeForm,
-    ReserveForm,
+    ReserveForm,ReserveChangeForm,ReserveChangeFormSet,
 )
 from reserve.models import Reserve
+from . import forms
 
 User = get_user_model()
 
@@ -240,8 +241,23 @@ class ReserveSeats(LoginRequiredMixin,generic.CreateView):
         post.reserve_flg = True
         post.save()
         return redirect('register:reserve_seats')
-
-class ReserveDetail(generic.DetailView):
+    
+class ReserveDetailAll(generic.ListView):
     """予約情報閲覧"""
+    
     model = Reserve
-    template_name = 'register/reserve_detail.html'
+    template_name = 'register/top.html'
+
+def ReserveChange(request):
+    ### formSetクラスのインスタンス
+    formset = ReserveChangeFormSet(request.POST or None,queryset=Reserve.objects.filter(reserve_user_id=request.user))
+    print(formset.errors)
+    if request.method == 'POST' and formset.is_valid():
+        formset.save()
+        return redirect('register:top')
+
+    context = {
+        'formset': formset  ### テンプレートにformsetを渡す
+    }
+
+    return render(request, 'register/reserve_change.html', context)
