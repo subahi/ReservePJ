@@ -5,7 +5,7 @@ from . import views
 
 app_name = 'register'
 urlpatterns = [
-    path('', views.Top.as_view(), name='top'),
+    #path('', views.Top.as_view(), name='top'),
     path('login/', views.Login.as_view(), name='login'),
     path('logout/', views.Logout.as_view(), name='logout'),
     path('user_create/', views.UserCreate.as_view(), name='user_create'),
@@ -24,4 +24,6 @@ urlpatterns = [
     path('email/change/complete/<str:token>/', views.EmailChangeComplete.as_view(), name='email_change_complete'),
     path('reserve_seats/', views.ReserveSeats.as_view(), name='reserve_seats'),
     path('reserve_change/', views.ReserveChange, name='reserve_change'),
+    path('', views.WeekWithScheduleCalendar.as_view(), name='top'),
+    path('week/<int:year>/<int:month>/<int:day>/', views.WeekWithScheduleCalendar.as_view(), name='top'),
 ]

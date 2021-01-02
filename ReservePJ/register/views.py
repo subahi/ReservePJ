@@ -20,6 +20,10 @@ from .forms import (
 )
 from reserve.models import Reserve
 from . import forms
+from . import mixins
+import datetime
+from django.utils import timezone
+
 
 User = get_user_model()
 
@@ -256,3 +260,16 @@ def ReserveChange(request):
     }
 
     return render(request, 'register/reserve_change.html', context)
+
+class WeekWithScheduleCalendar(mixins.WeekWithScheduleMixin, generic.TemplateView):
+    """スケジュール付きの週間カレンダーを表示するビュー"""
+    template_name = 'register/top.html'
+    model = Reserve
+    now = timezone.localtime(timezone.now())
+    date_field = 'reserve_day'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        calendar_context = self.get_week_calendar()
+        context.update(calendar_context)
+        return context

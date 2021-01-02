@@ -109,33 +109,46 @@ class DateInput(forms.DateInput):
 
 class ReserveForm(forms.ModelForm):
     """席予約フォーム"""
-    reserve_date = forms.SplitDateTimeField(label = "予約日時",
-                                            widget=forms.SplitDateTimeWidget(date_attrs={"type":"date"}, time_attrs={"type":"time"}))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+            if field.label == '予約日':
+                field.widget.attrs["class"] += " date_input"
+            if field.label == '予約開始時間':
+                field.widget.attrs["class"] += " time_input"
+
     class Meta:
         model = Reserve
         fields = ('__all__')
         exclude = ('reserve_user','reserve_flg','reserve_time','change_time',)
         labels={
             'seats':'予約席',
+            'reserve_day':'予約日',
+            'reserve_start_time':'予約開始時間',
             'reserve_hour_zone':'予約時間数',
             }
 
 class ReserveChangeForm(forms.ModelForm):
     """席予約情報更新フォーム"""
-    
-    reserve_date = forms.SplitDateTimeField(label = "予約日時",
-                                            widget=forms.SplitDateTimeWidget(date_attrs={"type":"date"}, time_attrs={"type":"time"}))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
+            if field.label == '予約日':
+                field.widget.attrs["class"] += " date_input"
+            if field.label == '予約開始時間':
+                field.widget.attrs["class"] += " time_input"
 
     class Meta:
         model = Reserve
-        fields = ('seats','reserve_date','reserve_hour_zone','reserve_flg')
+        fields = ('seats','reserve_day','reserve_start_time','reserve_hour_zone','reserve_flg')
         labels={
             'seats':'予約席',
+            'reserve_day':'予約日',
+            'reserve_start_time':'予約開始時間',
             'reserve_hour_zone':'予約時間数',
             'reserve_flg':'キャンセルフラグ'
             }

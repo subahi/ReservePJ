@@ -1,32 +1,47 @@
 ﻿{% extends "register/base.html" %}
 {% block content %}
     {% if user.is_authenticated %}
-        <div class="container-fluid" style="margin-top: 60px;">
-          <div class="row">
-            <div class="col-md-6 offset-md-3" >
-              <div class="card">
-                <p>予約一覧</p>
-                <div class="card-header"予約一覧</div>
-              {% for reserve in reserve_list %}
-                  <div class="card-body p-3">
-                    <p class="card-text">
-                        予約済席:{{ reserve.seats }} 
-                     </p>
-                    <p class="card-text">
-                        予約日付:{{ reserve.reserve_date|date:"Y/m/d" }}
-                     </p>
-                    <p class="card-text">
-                        予約時間:{{ reserve.reserve_date|date:"H:i" }} - {{ reserve.reserve_end_time|date:"H:i" }}
-                     </p>
-                    <p class="card-text">
-                        予約者:{{ reserve.reserve_user.username }}
-                     </p>
-                 </div><!-- end card-body -->
-             {% endfor %}
-              </div><!-- end card -->
-            </div><!-- end col-md-6 offset-md-3 -->
-          </div><!-- end row -->
-        </div><!-- end container-fluid -->
+        <a href="{% url 'register:top' week_previous.year week_previous.month  week_previous.day %}">前週</a>
+        {{ week_first | date:"Y年m月d日" }}〜{{ week_last | date:"Y年m月d日" }}
+        <a href="{% url 'register:top' week_next.year week_next.month  week_next.day %}">次週</a>
+
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                {% for w in week_names %}
+                    <th>{{ w }}</th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                {% for day in week_days %}
+                    {% if now == day %}
+                        <td class="table-success">
+                    {% else %}
+                        <td>
+                    {% endif %}
+                {% if week_first.month != day.month %}
+                    {{ day | date:"m/d" }}
+                {% else %}
+                    {{ day.day }}
+                {% endif %}
+                </td>
+                {% endfor %}
+            </tr>
+            <tr>
+                {% for schedules in week_day_schedules.values %}
+                    <td>
+                        {% for s in schedules %}
+                            予約席　：{{ s.seats }}<br />
+                            予約時間：{{ s.reserve_start_time|date:"H:i" }} - {{ s.reserve_end_time|date:"H:i" }}<br />
+                            予約者　：{{ s.reserve_user.username }}
+                        {% endfor %}
+                    </td>
+                {% endfor %}
+            </tr>
+            </tbody>
+        </table>
     {% else %}
         <p>ログインをお願いします</p>
     {% endif %}

@@ -45,6 +45,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="register\migrations\__init__.py" />
+    <Compile Include="register\mixins.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="register\models.py" />
     <Compile Include="register\tests.py" />
     <Compile Include="register\urls.py">
@@ -105,6 +108,7 @@
     <Content Include="register\templates\register\email_change_form.html" />
     <Content Include="register\templates\register\reserve_seats.html" />
     <Content Include="register\templates\register\reserve_change.html" />
+    <Content Include="register\templates\register\top_bkup.html" />
     <Content Include="register\templates\register\widgets\file_input_with_preview.html" />
     <Content Include="register\templates\register\mail_template\create\message.txt" />
     <Content Include="register\templates\register\mail_template\create\subject.txt" />

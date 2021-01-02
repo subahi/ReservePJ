@@ -48,8 +48,10 @@ class Reserve(models.Model):
     reserve_user = models.ForeignKey(User, on_delete=models.CASCADE)
     reserve_id = models.AutoField(primary_key=True)
     reserve_flg = models.BooleanField()
-    reserve_date = models.DateTimeField()
+    reserve_day = models.DateField()
     #予約している日時
+    reserve_start_time = models.TimeField()
+    #予約開始時間
     reserve_hour_zone = models.IntegerField()
     ##予約した時間帯
     #reserve_start_time = models.TimeField()
@@ -59,16 +61,18 @@ class Reserve(models.Model):
     change_time = models.DateTimeField(auto_now=True)
     
     def __str__(self):
-       return str(self.reserve_user) + '_' + self.reserve_time.strftime("%Y/%m/%d %H:%M:%S")
+       return str(self.reserve_user) + '_' + str(self.seats) + '_' + self.reserve_day.strftime("%Y/%m/%d")
 
     #def __str__(self):
     #   return str(self.reserve_start_time + datetime.timedelta(hours=self.reserve_hour_zone))
     
     #時間帯 + 開始時間(hh)でend_timeを算出
     def reserve_end_time(self):
-        start = self.reserve_date
+        start = self.reserve_start_time
+        base = datetime.timedelta(hours=start.hour,minutes=start.minute)
         zone = datetime.timedelta(hours=self.reserve_hour_zone,minutes=0)
-        return start + zone  
+        end = str(base + zone) 
+        return datetime.datetime.strptime(end,"%H:%M:%S")  
 
     class Meta:
         ordering = ['seats_id','reserve_id']
