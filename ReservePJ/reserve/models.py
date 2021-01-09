@@ -66,12 +66,16 @@ class Reserve(models.Model):
     #def __str__(self):
     #   return str(self.reserve_start_time + datetime.timedelta(hours=self.reserve_hour_zone))
     
-    #時間帯 + 開始時間(hh)でend_timeを算出
+    #時間帯 + 開始時間(hh)で予約終了時間を算出
     def reserve_end_time(self):
         start = self.reserve_start_time
         base = datetime.timedelta(hours=start.hour,minutes=start.minute)
         zone = datetime.timedelta(hours=self.reserve_hour_zone,minutes=0)
-        end = str(base + zone) 
+        end = base + zone 
+        if end >= datetime.timedelta(hours=24):
+            end = str(end / 24)
+        else:
+            end = str(end)
         return datetime.datetime.strptime(end,"%H:%M:%S")  
 
     class Meta:

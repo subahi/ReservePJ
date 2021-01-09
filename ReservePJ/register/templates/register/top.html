@@ -8,6 +8,9 @@
         <table class="table table-bordered">
             <thead>
             <tr>
+                {% for o in office_category %}
+                    <th></th>
+                {% endfor %}
                 {% for w in week_names %}
                     <th>{{ w }}</th>
                 {% endfor %}
@@ -15,31 +18,35 @@
             </thead>
             <tbody>
             <tr>
+                {% for o in office_category %}
+                    <td>{{ o }}</td>
+                {% endfor %}
                 {% for day in week_days %}
                     {% if now == day %}
                         <td class="table-success">
                     {% else %}
                         <td>
                     {% endif %}
-                {% if week_first.month != day.month %}
                     {{ day | date:"m/d" }}
-                {% else %}
-                    {{ day.day }}
-                {% endif %}
                 </td>
                 {% endfor %}
             </tr>
-            <tr>
-                {% for schedules in week_day_schedules.values %}
-                    <td>
-                        {% for s in schedules %}
-                            予約席　：{{ s.seats }}<br />
-                            予約時間：{{ s.reserve_start_time|date:"H:i" }} - {{ s.reserve_end_time|date:"H:i" }}<br />
-                            予約者　：{{ s.reserve_user.username }}
+            {% for r in resultlist %}
+                    <tr>
+                        <td>{{ r.0.0 }}</td>
+                        <td>{{ r.1.0 }}</td>
+                        <td>{{ r.2.0 }}</td>
+                        {% for schedules in week_day_schedules.values %}
+                            <td>
+                            {% for s in schedules %}
+                                {% if s.seats == r.2.0 %}
+                                <img src='{{ s.reserve_user.image.url }}' width=40>:{{ s.reserve_start_time|date:"H:i" }} - {{ s.reserve_end_time|date:"H:i" }}<br />
+                                {% endif %}
+                            {% endfor %}
+                            </td>
                         {% endfor %}
-                    </td>
-                {% endfor %}
-            </tr>
+                    </tr>
+            {% endfor %}
             </tbody>
         </table>
     {% else %}

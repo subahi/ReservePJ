@@ -3,12 +3,31 @@ import calendar
 from collections import deque
 import datetime
 from django.utils import timezone
+from reserve.models import Floor,Room,Seats
+from django.db.models import Count
+from django.db import connection
 
 now = timezone.localtime(timezone.now())
 class BaseCalendarMixin:
     """カレンダー関連Mixinの、基底クラス"""
     first_weekday = 0  # 0は月曜から、1は火曜から。6なら日曜日からになります。お望みなら、継承したビューで指定してください。
     week_names = ['月', '火', '水', '木', '金', '土', '日']  # これは、月曜日から書くことを想定します。['Mon', 'Tue'...
+    #カレンダーに表示する見出し情報
+    office_category = ['フロア','ルーム','席']
+    floor_category = Floor.objects.all().order_by('floor_id')
+    room_category = Room.objects.all().order_by('floor','room_id')
+    seats_category = Seats.objects.all().order_by('room','seats_id')
+    #thタグのrowspan値
+    floor_row = Floor.objects.all().order_by('floor_id').annotate(Count('room__seats'))
+    room_row = Room.objects.all().order_by('floor','room_id').annotate(Count('seats'))
+
+    resultlist = []
+    for f in floor_category:
+        for r in room_category:
+            if f == r.floor:
+                for s in seats_category:
+                    if r == s.room:
+                        resultlist.append([[f],[r],[s]]) 
 
     def setup_calendar(self):
         """内部カレンダーの設定処理
@@ -57,6 +76,8 @@ class WeekCalendarMixin(BaseCalendarMixin):
             'week_names': self.get_week_names(),
             'week_first': first,
             'week_last': last,
+            'office_category': self.office_category,
+            'resultlist':self.resultlist,
         }
         return calendar_data
 
