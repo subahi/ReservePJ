@@ -23,7 +23,8 @@ urlpatterns = [
     path('email/change/done/', views.EmailChangeDone.as_view(), name='email_change_done'),
     path('email/change/complete/<str:token>/', views.EmailChangeComplete.as_view(), name='email_change_complete'),
     path('reserve_seats/', views.ReserveSeats.as_view(), name='reserve_seats'),
-    path('reserve_change/', views.ReserveChange, name='reserve_change'),
+    path('reserve_update/<int:pk>/', views.ReserveUpdate.as_view(), name='reserve_update'),
+    #path('reserve_change/', views.ReserveChange, name='reserve_change'),
     path('', views.WeekWithScheduleCalendar.as_view(), name='top'),
     path('week/<int:year>/<int:month>/<int:day>/', views.WeekWithScheduleCalendar.as_view(), name='top'),
 ]

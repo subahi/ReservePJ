@@ -40,7 +40,11 @@
                             <td>
                             {% for s in schedules %}
                                 {% if s.seats == r.2.0 and s.reserve_flg == True %}
-                                <img src='{{ s.reserve_user.image.url }}' width=40>:{{ s.reserve_start_time|date:"H:i" }} - {{ s.reserve_end_time|date:"H:i" }}<br />
+                                    {% if s.reserve_user.pk == user.pk %}
+                                        <a href="{% url 'register:reserve_update' s.reserve_id %}"><img src='{{ s.reserve_user.image.url }}' width=40>:{{ s.reserve_start_time|date:"H:i" }} - {{ s.reserve_end_time|date:"H:i" }}</a><br />
+                                    {% else %}
+                                        <img src='{{ s.reserve_user.image.url }}' width=40>:{{ s.reserve_start_time|date:"H:i" }} - {{ s.reserve_end_time|date:"H:i" }}<br />
+                                    {% endif %}
                                 {% endif %}
                             {% endfor %}
                             </td>

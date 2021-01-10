@@ -16,7 +16,7 @@ from django.urls import reverse_lazy
 from .forms import (
     LoginForm, UserCreateForm, UserUpdateForm, MyPasswordChangeForm,
     MyPasswordResetForm, MySetPasswordForm,EmailChangeForm,
-    ReserveForm,ReserveChangeForm,ReserveChangeFormSet,
+    ReserveForm,ReserveUpdateForm,ReserveChangeForm,ReserveChangeFormSet,
 )
 from reserve.models import Reserve
 from . import forms
@@ -239,7 +239,7 @@ class ReserveSeats(LoginRequiredMixin,generic.CreateView):
     template_name = 'reserve/reserve_seats.html'
  
     # form_valid関数をオーバーライドすることで、更新するフィールドと値を指定できる
-    def form_valid(self, form , clean):
+    def form_valid(self, form):
         post = form.save(commit=False)
         # ログイン中のユーザーIDを隠しフォームの初期値に渡す
         post.reserve_user = self.request.user
@@ -247,21 +247,27 @@ class ReserveSeats(LoginRequiredMixin,generic.CreateView):
         # 予約済フラグにTrueをセット
         post.reserve_flg = True
         post.save()
-        return redirect('register:reserve_seats')  
+        return redirect('register:top')  
     
-def ReserveChange(request):
-    ### formSetクラスのインスタンス
-    formset = ReserveChangeFormSet(request.POST or None,queryset=Reserve.objects.filter(reserve_user_id=request.user))
-    print(formset.errors)
-    if request.method == 'POST' and formset.is_valid():
-        formset.save()
-        return redirect('register:top')
 
-    context = {
-        'formset': formset  ### テンプレートにformsetを渡す
-    }
 
-    return render(request, 'register/reserve_change.html', context)
+class ReserveUpdate(LoginRequiredMixin, generic.UpdateView):
+    """予約情報更新"""
+    model = Reserve
+    form_class = ReserveUpdateForm
+    template_name = 'register/reserve_updateform.html'
+    
+    def get_form_kwargs(self):
+        kwargs = super(ReserveUpdate,self).get_form_kwargs()
+        kwargs['reserve_id'] =self.kwargs['pk'] 
+        return kwargs
+
+    def form_valid(self, form):
+        post = form.save()
+        post = form.save(commit=False)
+        post.reserve_end_time = calc_end_time(post.reserve_start_time,post.reserve_hour_zone)
+        post.save()
+        return redirect('register:top')  
 
 class WeekWithScheduleCalendar(mixins.WeekWithScheduleMixin, generic.TemplateView):
     """スケジュール付きの週間カレンダーを表示するビュー"""
@@ -275,3 +281,18 @@ class WeekWithScheduleCalendar(mixins.WeekWithScheduleMixin, generic.TemplateVie
         calendar_context = self.get_week_calendar()
         context.update(calendar_context)
         return context
+
+def ReserveChange(request):
+    """未使用:理由はForms側に記載"""
+    ### formSetクラスのインスタンス
+    formset = ReserveChangeFormSet(request.POST or None,queryset=Reserve.objects.filter(reserve_user_id=request.user))
+    print(formset.errors)
+    if request.method == 'POST' and formset.is_valid():
+        formset.save()
+        return redirect('register:top')
+
+    context = {
+        'formset': formset  ### テンプレートにformsetを渡す
+    }
+
+    return render(request, 'register/reserve_change.html', context)

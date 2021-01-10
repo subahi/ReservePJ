@@ -134,6 +134,7 @@
     <Content Include="register\templates\register\user_detail.html" />
     <Content Include="register\templates\register\user_form.html" />
     <Content Include="register\templates\register\password_change.html" />
+    <Content Include="register\templates\register\reserve_updateform.html" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
     <Content Include="app\static\app\content\bootstrap.css" />
