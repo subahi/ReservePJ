@@ -21,6 +21,7 @@ from .forms import (
 from reserve.models import Reserve
 from . import forms
 from . import mixins
+from .function import calc_end_time
 import datetime
 from django.utils import timezone
 
@@ -230,7 +231,7 @@ class EmailChangeComplete(LoginRequiredMixin, generic.TemplateView):
             request.user.email = new_email
             request.user.save()
             return super().get(request, **kwargs)
-        
+
 class ReserveSeats(LoginRequiredMixin,generic.CreateView):
     """席予約"""
     model = Reserve
@@ -238,14 +239,15 @@ class ReserveSeats(LoginRequiredMixin,generic.CreateView):
     template_name = 'reserve/reserve_seats.html'
  
     # form_valid関数をオーバーライドすることで、更新するフィールドと値を指定できる
-    def form_valid(self, form):
+    def form_valid(self, form , clean):
         post = form.save(commit=False)
         # ログイン中のユーザーIDを隠しフォームの初期値に渡す
         post.reserve_user = self.request.user
+        post.reserve_end_time = calc_end_time(post.reserve_start_time,post.reserve_hour_zone)
         # 予約済フラグにTrueをセット
         post.reserve_flg = True
         post.save()
-        return redirect('register:reserve_seats')
+        return redirect('register:reserve_seats')  
     
 def ReserveChange(request):
     ### formSetクラスのインスタンス

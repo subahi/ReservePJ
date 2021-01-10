@@ -91,3 +91,18 @@ class User(AbstractBaseUser, PermissionsMixin):
         メールアドレスを返す
         """
         return self.get_full_name
+
+class Day_of_the_week(models.Model):
+    name_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=150,verbose_name='曜日')
+
+    def __str__(self):
+        return self.name
+
+    def custom_name(self):
+        return self.name + '曜日'
+
+    class Meta:
+        ordering = ['name_id']
+        verbose_name = '曜日'
+        verbose_name_plural = '曜日'

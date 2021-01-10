@@ -44,6 +44,9 @@
     <Compile Include="register\forms.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="register\function.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="register\migrations\__init__.py" />
     <Compile Include="register\mixins.py">
       <SubType>Code</SubType>

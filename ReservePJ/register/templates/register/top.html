@@ -34,12 +34,12 @@
             {% for r in resultlist %}
                     <tr>
                         <td>{{ r.0.0 }}</td>
-                        <td>{{ r.1.0 }}</td>
-                        <td>{{ r.2.0 }}</td>
+                        <td>{{ r.1.0.only_name }}</td>
+                        <td>{{ r.2.0.only_name }}</td>
                         {% for schedules in week_day_schedules.values %}
                             <td>
                             {% for s in schedules %}
-                                {% if s.seats == r.2.0 %}
+                                {% if s.seats == r.2.0 and s.reserve_flg == True %}
                                 <img src='{{ s.reserve_user.image.url }}' width=40>:{{ s.reserve_start_time|date:"H:i" }} - {{ s.reserve_end_time|date:"H:i" }}<br />
                                 {% endif %}
                             {% endfor %}

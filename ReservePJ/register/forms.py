@@ -9,6 +9,8 @@ from .widgets import FileInputWithPreview
 from reserve.models import Reserve
 import bootstrap_datepicker_plus as datetimepicker
 from django.forms.widgets import SplitDateTimeWidget 
+from .function import calc_end_time
+import datetime
 
 User = get_user_model()
 
@@ -106,6 +108,7 @@ class EmailChangeForm(forms.ModelForm):
 
 class DateInput(forms.DateInput):
     input_type = 'date'
+       
 
 class ReserveForm(forms.ModelForm):
     """席予約フォーム"""
@@ -118,11 +121,25 @@ class ReserveForm(forms.ModelForm):
                 field.widget.attrs["class"] += " date_input"
             if field.label == '予約開始時間':
                 field.widget.attrs["class"] += " time_input"
+    
+    def clean(self, *args, **kwargs):
+        #フォームの入力情報を取得
+        cleaned_data = super().clean()
+        r_seats = cleaned_data.get('seats')
+        r_day = cleaned_data.get('reserve_day')
+        r_time_start = cleaned_data.get('reserve_start_time')
+        r_zone = cleaned_data.get('reserve_hour_zone')
+        r_time_end = calc_end_time(r_time_start,r_zone)
+        #モデルから入力情報と合致するレコードがあるかをチェック
+        reserve_data = Reserve.objects.filter(seats=r_seats,reserve_day=r_day,reserve_start_time__lte=r_time_start,reserve_end_time__gte=r_time_end)
+        if reserve_data.first() is not None:
+                self.add_error(None,'既に予約済です') 
+        return cleaned_data
 
     class Meta:
         model = Reserve
         fields = ('__all__')
-        exclude = ('reserve_user','reserve_flg','reserve_time','change_time',)
+        exclude = ('reserve_user','reserve_flg','reserve_end_time','reserve_time','change_time',)
         labels={
             'seats':'予約席',
             'reserve_day':'予約日',
@@ -152,7 +169,6 @@ class ReserveChangeForm(forms.ModelForm):
             'reserve_hour_zone':'予約時間数',
             'reserve_flg':'キャンセルフラグ'
             }
-
 
 ### modelformset_factoryはFormSetクラスを返します
 ReserveChangeFormSet = forms.modelformset_factory(
