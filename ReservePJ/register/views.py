@@ -121,7 +121,6 @@ class OnlyYouMixin(UserPassesTestMixin):
         user = self.request.user
         return user.pk == self.kwargs['pk'] or user.is_superuser
 
-
 class UserDetail(OnlyYouMixin, generic.DetailView):
     """ユーザー情報閲覧"""
     model = User
@@ -248,20 +247,28 @@ class ReserveSeats(LoginRequiredMixin,generic.CreateView):
         post.reserve_flg = True
         post.save()
         return redirect('register:top')  
-    
-
-
-class ReserveUpdate(LoginRequiredMixin, generic.UpdateView):
+           
+class ReserveUpdate(LoginRequiredMixin,generic.UpdateView):
     """予約情報更新"""
     model = Reserve
     form_class = ReserveUpdateForm
     template_name = 'register/reserve_updateform.html'
     
+    # ログインしているユーザが作ったもでなければアクセス不可
+    def get_queryset(self):
+    	# このビューで生成されるベースとなるクエリセットを取得
+        base_qs = super(ReserveUpdate, self).get_queryset()
+        # さらにユーザIDで絞った結果を返す。(存在しないので404が返る)
+        # 条件分岐してエラーページを出しても可
+        return base_qs.filter(reserve_user=self.request.user)
+
+    # Formにpkを渡す（更新対象特定の値として）
     def get_form_kwargs(self):
         kwargs = super(ReserveUpdate,self).get_form_kwargs()
         kwargs['reserve_id'] =self.kwargs['pk'] 
         return kwargs
 
+    # 更新ボタン押下時 終了時間を算出してUpdate
     def form_valid(self, form):
         post = form.save()
         post = form.save(commit=False)
